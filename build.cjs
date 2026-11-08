@@ -1,5 +1,5 @@
 const fs=require('fs'),path=require('path'),root=__dirname;
-const names=['core.mjs','primitives.mjs','models.mjs','view.mjs','sdk.mjs','audio.mjs','app.mjs'];
+const names=['core.mjs','world.mjs','primitives.mjs','models.mjs','view.mjs','sdk.mjs','audio.mjs','app.mjs'];
 // Each module gets a scope, preserving private helper names in the offline build.
 let declarations='',modules={};
 for(const [i,n]of names.entries()){

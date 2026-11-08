@@ -1,0 +1,7 @@
+// Shared dimensions for actual passage meshes, walking support and regression checks.
+export const WORLD={speed:.7,roadWidth:7.2,fenceX:4.1,bridge:{z:-20,halfWidth:4.25,halfLength:4.2,ramp:2.4,top:.24,railX:4.5},aqueduct:{z:-20,inner:4.5,outer:5.1,spring:3.2,depth:1.5},gate:{z:-37,inner:4.05,outer:4.6,spring:4.4,depth:1.5}};
+export function gait(phase,walking=true){let u=((phase/(Math.PI*2))%1+1)%1,stance=u<.62;return{stride:walking?(stance?-.3+u/.62*.6:.3-(u-.62)/.38*.6):0,lift:walking&&!stance?Math.sin((u-.62)/.38*Math.PI)*.42:0,stance:!walking||stance};}
+export function groundHeight(route,x,z,time){if(route!==3)return 0;let b=WORLD.bridge,local=z-(b.z+time*WORLD.speed);if(Math.abs(x)>b.halfWidth)return 0;let d=Math.abs(local);return d<=b.halfLength?b.top:d<b.halfLength+b.ramp?b.top*(1-(d-b.halfLength)/b.ramp):0;}
+export function groundSupport(route,x,z,time,hx=.49,hz=.61){let h=0;for(let xx of [-hx,0,hx])for(let zz of [-hz,0,hz])h=Math.max(h,groundHeight(route,x+xx,z+zz,time));return h;}
+export function bodySupport(route,time,walking=true){let sum=0;for(let i=0;i<4;i++){let side=i<2?-1:1,z=i%2?1.65:-1.65,p=gait(time*4.5+(i===0||i===3?0:Math.PI),walking);sum+=groundSupport(route,side*2.65,z+p.stride,time);}return sum/4;}
+export function passageCeiling(route,x){let a=route===1?WORLD.aqueduct:route===5?WORLD.gate:null;if(!a)return Infinity;if(Math.abs(x)>=a.inner)return 0;return a.spring+Math.sqrt(a.inner*a.inner-x*x);}

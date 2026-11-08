@@ -23,7 +23,15 @@ Reference: Combos **Minecraft: Walking Fortress**, by Kideo Hojima, <https://com
 
 `index.html` and `standalone.html` are identical self-contained entries with the renderer, application and CSS embedded. Extract the ZIP and open either entry, or put its root on any static HTML5 host. A WebGL-capable browser is required. No SDK or network request is required for the core game. The optional icon and cover are local files. `index-source.html` is the modular development entry and needs a static server.
 
-Run `node build.cjs` after source changes. Run `node tests.mjs` and `node model-check.mjs` for game-specific simulation/SDK-mock and actual mesh checks. Model tests stub canvas text drawing; texture pixels are reviewed in the real browser.
+Run `node build.cjs` after source changes. Run `node tests.mjs`, `node model-check.mjs` and `node passage-check.mjs` for game-specific simulation/SDK mocks, actual mesh checks and bridge/gate passage regressions. Model tests stub canvas text drawing; texture pixels are reviewed in the real browser.
+
+### Model and bridge revision — November 9, 2026
+
+The fortress now has a pitched panel roof, ridge/eave trim, banded chimney, boiler pipes, plated leg frames, knee axles, hydraulic sleeves and riveted footpads. The human engineer has a connected upper-body rig, coat lapels and pockets, goggles with lenses, hair/beard, cuffs, fingers and boot straps. Multi-barrel guns have separated barrels and corrected muzzle flashes. The original palette, game controller, input, audio, SDK adapter and `fort-on-foot-v1` progression remain intact.
+
+The old aqueduct placed piers in the lane and its low beam cut through the house. Its new central arch has a 9-metre opening, outside piers and an elevated trough. Highgate also has a taller clear arch. The wooden crossing has an 8.5-metre deck, rails outside the full walking-foot envelope and two proper ramps. Roadside fences and rocks were moved outside that envelope. The flat road surface is now at the same zero height used by the foot support model.
+
+`world.mjs` shares exact bridge dimensions and ramp heights with both the generated meshes and renderer. Foot support samples the full sole footprint, not just its centre. The body and connected hip/knee/ankle positions follow the bridge; shots, raiders, focus and stomp effects also use surface height. All transforms derive from the existing route/time checkpoint, so saved runs need no migration. `passage-check.mjs` sweeps the actual rendered bridge/arch triangles against conservative body and individual leg/sole bounds, with four level-three weapons, the banner and stomp compression. This validates the authored fortress crossings, not a general rigid-body collision or NPC navigation system.
 
 Only `fort-on-foot-v1` is read from localStorage. Saves contain fitted weapons, build supplies, route, hull, charge, enemy and projectile state, cooldowns, focus, best results, settings and reward flags. Reloading during a march opens a safe pause menu. Resuming advances that exact encounter rather than silently restarting it. Build checkpoints keep both supply pick bits and installations. No other game's saves are enumerated, uploaded or cleared.
 
